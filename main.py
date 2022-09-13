@@ -37,13 +37,13 @@ arrayferiado = [
 
 ]
 
-planilha = openpyxl.load_workbook("OBJETOTESTE.xlsx")
-aba=planilha["OBJETO DE TESTE"]
+planilha = openpyxl.load_workbook("RELATORIO MÊS 07.xlsx")
+aba=planilha["RELATORIO MÊS 07"]
 feriados = holidays.Brazil()
 
 df = pd.read_excel(
-    io='OBJETOTESTE.xlsx',
-    sheet_name= 'OBJETO DE TESTE',
+    io='RELATORIO MÊS 07.xlsx',
+    sheet_name= 'RELATORIO MÊS 07',
     usecols='A:R'
 
 )
@@ -54,18 +54,35 @@ quantidadelinhas=0
 for row in aba.iter_rows(min_row=2, max_col=1):
     quantidadelinhas+=1
 
-print(df.iloc[:, 0])
-print(quantidadelinhas)
+#print(df.iloc[:, 0])
+#print(quantidadelinhas)
 
-
+i=0
 for i in range(quantidadelinhas):
-    if datetime.strptime(str(df.iloc[i,0])[0:10],"%Y-%m-%d").weekday()==5:
-        print('tem uma sexta aqui')
-        df.replace(df[i][0], datetime.strptime(str(df.iloc[i,0]),"%Y-%m-%d %H:%M:%S") + timedelta(days=2))
-    if datetime.strptime(str(df.iloc[i,0])[6:10],"%m-%d") in arrayferiado:
+    # print(df['DATA GERACAO'][i].weekday())
+    hora=df['DATA GERACAO'][i].hour
+    #print(str(df['DATA GERACAO'][i])[0:10])
+    if df['DATA GERACAO'][i].weekday() ==3 and hora <= 12 and df['SERVICO TIPO'][i]== 'CORTE POR DEBITO':
+        data = df['DATA GERACAO'][i] + timedelta(days=3)
+        df['DATA GERACAO'][i] = data
+
+    if df['DATA GERACAO'][i].weekday() == 4:
+        data=df['DATA GERACAO'][i]+timedelta(days=3)
+        df['DATA GERACAO'][i]=data
+
+    if str(df['DATA GERACAO'][i])[0:10] in arrayferiado:
+        data = df['DATA GERACAO'][i] + timedelta(days=1)
         print('gerado no feriado')
 
+    if df['SERVICO TIPO'][i]=='VISITA DE COBRANCA':
+        data = df['DATA GERACAO'][i] + timedelta(days=1)
+        df['DATA GERACAO'][i] = data
 
-df.to_excel ("nemfodendo.xlsx", index=False)
 
+
+
+
+
+
+df.to_excel ("DATAS RETIFICADAS MÊS 07.xlsx", index=False)
 

@@ -37,31 +37,13 @@ arrayferiado = [
 
 ]
 
-planilha = openpyxl.load_workbook("nemfodendo.xlsx")
-aba=planilha["Sheet1"]
-feriados = holidays.Brazil()
+
 
 df = pd.read_excel(
-    io='nemfodendo.xlsx',
-    sheet_name= 'Sheet1',
+    io='RELATORIO MÊS 07.xlsx',
+    sheet_name= 'RELATORIO MÊS 07',
     usecols='A:R'
 
 )
 
-quantidadelinhas=0
-
-
-for row in aba.iter_rows(min_row=2, max_col=1):
-    quantidadelinhas+=1
-
-print(df.iloc[500, 0])
-print(quantidadelinhas)
-
-'''
-for i in range(quantidadelinhas):
-    if datetime.strptime(str(df.iloc[i,0])[0:10],"%Y-%m-%d").weekday()==5:
-        print('tem uma sexta aqui')
-        df.replace(df.iloc[i,0], datetime.strptime(str(df.iloc[i,0]),"%Y-%m-%d %H:%M:%S") + timedelta(days=2))
-    if datetime.strptime(str(df.iloc[i,0])[6:10],"%m-%d") in arrayferiado:
-        print('gerado no feriado')
-'''
+print((df['DATA GERACAO'][1]).hour)
